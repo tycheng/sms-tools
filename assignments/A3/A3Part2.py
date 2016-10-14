@@ -1,6 +1,6 @@
 ﻿from scipy.fftpack import fft
 import numpy as np
-from math import ceil, log
+from math import ceil
 
 """
 A3-Part-2: Optimal zero-padding
@@ -56,15 +56,12 @@ def optimalZeropad(x, fs, f):
         mX (numpy array) = The positive half of the DFT spectrum of the N point DFT after zero-padding 
                         x appropriately (zero-padding length to be computed). mX is (N/2)+1 samples long
     """
-    pass
-    M = int(float(fs) / f)
-    N = 2 ** int(ceil(log(M, 2)))
-    pad = N - M
-    print M, N
+    M, = x.shape
+    period = int(float(fs) / f)
+    N = int(ceil(M / period) * period)
 
     fftbuffer = np.zeros(N)
-    fftbuffer[:M/2] = x[M/2+pad:N]
-    fftbuffer[M/2+pad:N] = x[:M/2]
+    fftbuffer[:M] = x
     X = fft(fftbuffer)
     mX = 20*np.log10(abs(X[:M/2+1]))
     return mX
@@ -82,9 +79,9 @@ if __name__ == "__main__":
     plot(optimalZeropad(x, fs, f))
     show()
 
-    # # test case 2
-    # fs = 10000
-    # f = 250
-    # x = genSine(1, f, 0, fs, 10)
-    # plot(optimalZeropad(x, fs, f))
-    # show()
+    # test case 2
+    fs = 10000
+    f = 250
+    x = genSine(1, f, 0, fs, 10)
+    plot(optimalZeropad(x, fs, f))
+    show()

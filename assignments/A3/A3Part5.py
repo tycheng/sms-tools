@@ -60,4 +60,34 @@ def zpFFTsizeExpt(x, fs):
     xseg = x[:M]
     w1 = get_window('hamming',M)
     w2 = get_window('hamming',2*M)
-    ## Your code here 
+    
+    mX1, _ = dftAnal(xseg, w1, M)
+    mX2, _ = dftAnal(x,    w2, 2 * M)
+    mX3, _ = dftAnal(xseg, w1, 2 * M)
+
+    mX1 = mX1[:80]
+    mX2 = mX2[:80]
+    mX3 = mX3[:80]
+
+    plt.plot(mX1, label="mX1")
+    plt.plot(mX2, label="mX2")
+    plt.plot(mX3, label="mX3")
+    plt.show()
+
+    return mX1, mX2, mX3
+
+if __name__ == "__main__":
+    import os, sys
+    sys.path.append(os.path.join(os.path.dirname(__file__), "../A2"))
+    from matplotlib.pyplot import *
+    from A2Part1 import genSine
+
+    # test case 1
+    N = 512
+    fs = 512
+    sin1 = genSine(1, 40, 0, fs, 1)
+    sin2 = genSine(1, 100, 0, fs, 1)
+    sin3 = genSine(1, 200, 0, fs, 1)
+    sin4 = genSine(1, 1000, 0, fs, 1)
+    x = sin1 + sin2 + sin3 + sin4
+    zpFFTsizeExpt(x, fs)

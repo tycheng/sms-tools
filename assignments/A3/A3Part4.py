@@ -60,4 +60,31 @@ def suppressFreqDFTmodel(x, fs, N):
     w = get_window('hamming', M)
     outputScaleFactor = sum(w)
     
-    ## Your code here
+    mX, pX = dftAnal(x, w, N)
+
+    # no filter
+    y = dftSynth(mX, pX, M) * outputScaleFactor
+
+    # filter frequencies below 70
+    freq_threshold = int(70.0 * N / fs) + 1
+    mX[:freq_threshold] = -120.0
+    print len(mX), freq_threshold
+    yfilt = dftSynth(mX, pX, M) * outputScaleFactor
+    
+    return y, yfilt
+
+if __name__ == "__main__":
+    import os, sys
+    sys.path.append(os.path.join(os.path.dirname(__file__), "../A2"))
+    from matplotlib.pyplot import *
+    from A2Part1 import genSine
+
+    # test case 1
+    N = 512
+    fs = 500
+    sin1 = genSine(1, 40, 0, fs, 1)
+    sin2 = genSine(1, 100, 0, fs, 1)
+    sin3 = genSine(1, 200, 0, fs, 1)
+    sin4 = genSine(1, 1000, 0, fs, 1)
+    x = sin1 + sin2 + sin3 + sin4
+    y, yfilt = suppressFreqDFTmodel(x, fs, N)

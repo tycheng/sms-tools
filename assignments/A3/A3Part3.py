@@ -48,4 +48,32 @@ def testRealEven(x):
         dftbuffer (numpy array, possibly complex) = The M point zero phase windowed version of x 
         X (numpy array, possibly complex) = The M point DFT of dftbuffer 
     """
-    ## Your code here
+    M, = x.shape
+    half = int(math.floor(M/2))
+
+    dftbuffer = np.zeros(M)
+    dftbuffer[:half+1] = x[half:]
+    dftbuffer[half+1:] = x[:half]
+
+    X = fft(dftbuffer)
+    real = np.real(X)
+    imag = np.imag(X)
+    is_real_even = np.all(abs(real[1::1] - real[:0:-1]) < 1e-6)
+    is_imag_zero = not np.any(imag > 1e-6)
+
+    return is_real_even and is_imag_zero, dftbuffer, X
+
+
+if __name__ == "__main__":
+    import os, sys
+    sys.path.append(os.path.join(os.path.dirname(__file__), "../A2"))
+    from matplotlib.pyplot import *
+    from A2Part1 import genSine
+
+    # test case 1
+    x = np.array([ 2, 3, 4, 3, 2 ])
+    print testRealEven(x)
+
+    # test case 2
+    x = np.array([1, 2, 3, 4, 1, 2, 3])
+    print testRealEven(x)
