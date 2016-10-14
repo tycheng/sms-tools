@@ -69,10 +69,10 @@ def zpFFTsizeExpt(x, fs):
     mX2 = mX2[:80]
     mX3 = mX3[:80]
 
-    plt.plot(mX1, label="mX1")
-    plt.plot(mX2, label="mX2")
-    plt.plot(mX3, label="mX3")
-    plt.show()
+    # plt.plot(mX1, label="mX1")
+    # plt.plot(mX2, label="mX2")
+    # plt.plot(mX3, label="mX3")
+    # plt.show()
 
     return mX1, mX2, mX3
 

@@ -58,7 +58,7 @@ def optimalZeropad(x, fs, f):
     """
     M, = x.shape
     period = int(float(fs) / f)
-    N = int(ceil(M / period) * period)
+    N = int(ceil(float(M) / period) * period)
 
     fftbuffer = np.zeros(N)
     fftbuffer[:M] = x

@@ -59,18 +59,18 @@ def suppressFreqDFTmodel(x, fs, N):
     M = len(x)
     w = get_window('hamming', M)
     outputScaleFactor = sum(w)
-    
+
     mX, pX = dftAnal(x, w, N)
 
     # no filter
     y = dftSynth(mX, pX, M) * outputScaleFactor
 
     # filter frequencies below 70
-    freq_threshold = int(70.0 * N / fs) + 1
+    from math import ceil
+    freq_threshold = int(ceil(70.0 * N / fs)) + 1
     mX[:freq_threshold] = -120.0
-    print len(mX), freq_threshold
     yfilt = dftSynth(mX, pX, M) * outputScaleFactor
-    
+
     return y, yfilt
 
 if __name__ == "__main__":
