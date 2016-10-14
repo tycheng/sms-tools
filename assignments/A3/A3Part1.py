@@ -60,4 +60,32 @@ def minimizeEnergySpreadDFT(x, fs, f1, f2):
         mX (numpy array) = The positive half of the DFT spectrum (in dB) of the M sample segment of x. 
                            mX is (M/2)+1 samples long (M is to be computed)
     """
-    ## Your code here
+    M = int(float(fs) / gcd(f1, f2))
+    X = fft(x[:M])
+    mX = 20*np.log10(abs(X[:M/2+1]))
+    return mX
+
+
+if __name__ == "__main__":
+    import os, sys
+    sys.path.append(os.path.join(os.path.dirname(__file__), "../A2"))
+    from matplotlib.pyplot import *
+    from A2Part1 import genSine
+
+    # test case 1
+    fs = 10000
+    f1, f2 = 80, 200
+    sin1 = genSine(1, f1, 0, fs, 10)
+    sin2 = genSine(1, f2, 0, fs, 10)
+    x = sin1 + sin2
+    plot(minimizeEnergySpreadDFT(x, fs, f1, f2))
+    show()
+
+    # test case 2
+    fs = 48000
+    f1, f2 = 300,800
+    sin1 = genSine(1, f1, 0, fs, 10)
+    sin2 = genSine(1, f2, 0, fs, 10)
+    x = sin1 + sin2
+    plot(minimizeEnergySpreadDFT(x, fs, f1, f2))
+    show()
